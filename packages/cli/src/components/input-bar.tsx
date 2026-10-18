@@ -18,16 +18,15 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
 export function Inputbar ({onSubmit, disabled = false}: Props){
 
   const renderer = useRenderer();
-  const context1: CommandContext = {
-  exit : ()=>{renderer.destroy()}
-  }
   const textareaRef = useRef<TextareaRenderable | null>(null);
   const [value, setValue] = useState("");
 
 
   const handleExecute = (command: Command) => {
     if (command.action){
-      command.action(context1);
+      command.action({
+        exit: () => renderer.destroy()
+    });
       return
     }
     const next = `${getCommandValue(command)} `;
