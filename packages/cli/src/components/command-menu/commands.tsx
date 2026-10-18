@@ -8,13 +8,47 @@ export const COMMANDS: Command[] = [
     aliases: ["?"],
   },
   {
+    name: "new",
+    description: "Create a new chat",
+  },
+  {
+    name: "agents",
+    description: "Switch agents",
+
+  },
+  {
     name: "clear",
     description: "Clear the current conversation",
     aliases: ["reset"],
   },
   {
-    name: "model",
+    name: "models",
     description: "Switch the model used for this session",
+  },
+  {
+    name: "login",
+    description : "Sign in with you browser"
+  },
+  {
+    name: "logout",
+    description : "Sign out of your account",
+    aliases:  ["signout"]
+  },
+  {
+    name: "upgrade",
+    description : "Buy more credits"
+  },
+  {
+    name: "theme",
+    description : "Change color theme"
+  },
+  {
+    name: "sessions",
+    description : "Browse past sessions"
+  },
+  {
+    name: "logout",
+    description : "Sign out of your account"
   },
   {
     name: "init",

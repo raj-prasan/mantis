@@ -9,6 +9,3 @@ export type Command = {
 export type CommandContext = {
   exit :() => void
 }
-export const context1: CommandContext = {
-  exit : ()=>{process.exit()}
-}

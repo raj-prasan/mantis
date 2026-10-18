@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import type { KeyBinding, TextareaRenderable } from "@opentui/core";
 import { StatusBar } from "./status-bar";
-import { CommandMenu, context1, getCommandValue, useCommandMenu, type Command } from "./command-menu";
-
+import { CommandMenu, getCommandValue, useCommandMenu, type Command, type CommandContext } from "./command-menu";
+import { useRenderer } from "@opentui/react";
 type Props = {
   onSubmit: (text: string)=> void;
   disabled? : boolean
@@ -14,9 +14,16 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
   {name: "return" , shift: true, action: "newline"},
   {name: "enter" , shift: true, action: "newline",}
 ]
+
 export function Inputbar ({onSubmit, disabled = false}: Props){
+
+  const renderer = useRenderer();
+  const context1: CommandContext = {
+  exit : ()=>{renderer.destroy()}
+  }
   const textareaRef = useRef<TextareaRenderable | null>(null);
   const [value, setValue] = useState("");
+
 
   const handleExecute = (command: Command) => {
     if (command.action){
