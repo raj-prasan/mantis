@@ -1,3 +1,5 @@
+import type { ToastContextValue } from "../../providers/toast";
+
 export type Command = {
   name: string;
   description: string;
@@ -7,5 +9,6 @@ export type Command = {
 };
 
 export type CommandContext = {
-  exit :() => void
+  exit :() => void;
+  toast: ToastContextValue["toast"]
 }

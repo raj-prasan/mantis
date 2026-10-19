@@ -3,6 +3,7 @@ import type { KeyBinding, TextareaRenderable } from "@opentui/core";
 import { StatusBar } from "./status-bar";
 import { CommandMenu, getCommandValue, useCommandMenu, type Command, type CommandContext } from "./command-menu";
 import { useRenderer } from "@opentui/react";
+import { useToast } from "../providers/toast";
 type Props = {
   onSubmit: (text: string)=> void;
   disabled? : boolean
@@ -18,6 +19,7 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
 export function Inputbar ({onSubmit, disabled = false}: Props){
 
   const renderer = useRenderer();
+  const {toast} = useToast()
   const textareaRef = useRef<TextareaRenderable | null>(null);
   const [value, setValue] = useState("");
 
@@ -25,8 +27,9 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
   const handleExecute = (command: Command) => {
     if (command.action){
       command.action({
-        exit: () => renderer.destroy()
-    });
+        exit: () => renderer.destroy(),
+        toast
+      });
       return
     }
     const next = `${getCommandValue(command)} `;

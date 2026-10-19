@@ -32,7 +32,14 @@ export const COMMANDS: Command[] = [
   {
     name: "logout",
     description : "Sign out of your account",
-    aliases:  ["signout"]
+    aliases:  ["signout"],
+    action : (ctx)=> {
+      ctx.toast({
+        message: "Signed out",
+        variant: "info",
+        duration: 3000,
+      });
+    }
   },
   {
     name: "upgrade",
@@ -45,10 +52,6 @@ export const COMMANDS: Command[] = [
   {
     name: "sessions",
     description : "Browse past sessions"
-  },
-  {
-    name: "logout",
-    description : "Sign out of your account"
   },
   {
     name: "init",
