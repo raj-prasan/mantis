@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { KeyBinding, TextareaRenderable } from "@opentui/core";
 import { StatusBar } from "./status-bar";
 import { CommandMenu, getCommandValue, useCommandMenu, type Command, type CommandContext } from "./command-menu";
 import { useRenderer } from "@opentui/react";
 import { useToast } from "../providers/toast";
+import { useKeyboardLayer } from "../providers/keyboard-layer";
 type Props = {
   onSubmit: (text: string)=> void;
   disabled? : boolean
@@ -22,7 +23,7 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
   const {toast} = useToast()
   const textareaRef = useRef<TextareaRenderable | null>(null);
   const [value, setValue] = useState("");
-
+  const {isTopLayer, setResponder} = useKeyboardLayer();
 
   const handleExecute = (command: Command) => {
     if (command.action){
@@ -53,6 +54,20 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
     onSubmit(text);
   };
 
+  //register the base layer responder for ctrl+c dismissal
+  useEffect(()=>{
+    setResponder("base", ()=> {
+      if(disabled) return false
+
+      const textarea = textareaRef.current;
+      if(textarea && textarea.plainText.length> 0){
+        textarea.setText("")
+        return true
+      }
+      return false;
+    });
+    return ()=> setResponder("base" , null)
+  },[disabled, setResponder])
   return(
     <box width="100%" alignItems="center" flexDirection="column">
       {commandMenu.isOpen && (
