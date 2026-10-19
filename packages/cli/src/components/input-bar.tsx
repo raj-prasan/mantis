@@ -94,7 +94,8 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
         minWidth={78}
         gap={1}
         >
-          <textarea ref={textareaRef} focused= {!disabled}
+          <textarea ref={textareaRef} 
+          focused= {!disabled && (isTopLayer("base") || isTopLayer("command"))}
           keyBindings={TEXT_AREA_KEY_BINDINGS}
           placeholder={`Ask anything... Fix a bug in the database`}
           onContentChange={() => setValue(textareaRef.current?.editBuffer.getText() ?? "")}

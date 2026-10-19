@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useKeyboard } from "@opentui/react";
 import { COMMANDS, filterCommands, getCommandQuery } from "./commands";
 import type { Command } from "./types";
-
+import { useKeyboardLayer } from "../../providers/keyboard-layer";
 export type UseCommandMenuOptions = {
   value: string;
   commands?: Command[];
@@ -30,6 +30,7 @@ export function useCommandMenu({
   const query = getCommandQuery(value);
   const [dismissedQuery, setDismissedQuery] = useState<string | null>(null);
   const [rawActiveIndex, setRawActiveIndex] = useState(0);
+  const {push, pop, isTopLayer, setResponder} = useKeyboardLayer()
 
   const matches = useMemo(
     () => (query === null ? [] : filterCommands(commands, query)),
@@ -38,15 +39,31 @@ export function useCommandMenu({
 
   const isOpen = enabled && query !== null && query !== dismissedQuery;
 
+  
+ 
   useEffect(() => {
     setRawActiveIndex(0);
   }, [query]);
 
   const activeIndex = matches.length === 0 ? 0 : Math.min(rawActiveIndex, matches.length - 1);
 
-  const close = () => {
-    if (query !== null) setDismissedQuery(query);
-  };
+  const close = useCallback(() => {
+    if (query !== null) {
+      setDismissedQuery(query);
+    }
+  }, [query]);
+
+  useEffect(() => {
+    push("command", () => {
+      close();
+      pop("command");
+      return true;
+    });
+
+    return () => {
+      pop("command");
+    };
+  }, [push, pop, close]);
 
   const select = (command: Command) => {
     const index = matches.indexOf(command);
@@ -73,7 +90,7 @@ export function useCommandMenu({
   };
 
   useKeyboard((key) => {
-    if (!isOpen) return;
+    if (!isOpen|| !isTopLayer("command")) return;
     if (key.eventType === "release") return;
 
     const isNext = key.name === "down" || (key.ctrl && key.name === "n");

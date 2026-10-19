@@ -13,8 +13,21 @@ const BORDER = "#2A2A38";
 const ACTIVE_BACKGROUND = "#242433";
 const ACCENT = "cyan";
 const DESCRIPTION = "#6B7280";
+const MAX_VISIBLE = 8;
 
 export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: CommandMenuProps) {
+  if(commands.length === 0){
+    return
+  }
+
+  const start = Math.max(
+    0,
+    Math.min(activeIndex - Math.floor(MAX_VISIBLE / 2), commands.length - MAX_VISIBLE),
+  );
+  const visible = commands.slice(start, start + MAX_VISIBLE);
+  const hiddenAbove = start;
+  const hiddenBelow = commands.length - start - MAX_VISIBLE;
+
   return (
     <box
       width="100%"
@@ -24,13 +37,16 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
       borderColor={BORDER}
       backgroundColor={BACKGROUND}
     >
-      {commands.length === 0 ? (
-        <box paddingLeft={2} paddingRight={2} paddingY={1}>
-          <text fg={DESCRIPTION}>No matching commands</text>
+      {hiddenAbove > 0 && (
+        <box width="100%" paddingLeft={2} paddingRight={2}>
+          <text fg={DESCRIPTION} attributes={TextAttributes.DIM}>
+            {`↑ ${hiddenAbove} more`}
+          </text>
         </box>
-      ) : (
-        commands.map((command, index) => {
-          const active = index === activeIndex;
+      )}
+      {
+        visible.map((command, index) => {
+          const active = start + index === activeIndex;
           return (
             <box
               key={command.name}
@@ -40,8 +56,8 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
               paddingLeft={2}
               paddingRight={2}
               backgroundColor={active ? ACTIVE_BACKGROUND : BACKGROUND}
-              onMouseOver={() => onSelect(command)}
               onMouseDown={() => onExecute(command)}
+              onMouseMove={()=>onSelect(command)}
             >
               <text fg={active ? ACCENT : DESCRIPTION} attributes={active ? TextAttributes.BOLD : undefined}>
                 {(active ? "▸ " : "  ") + getCommandValue(command)}
@@ -50,6 +66,13 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
             </box>
           );
         })
+      }
+      {hiddenBelow > 0 && (
+        <box width="100%" paddingLeft={2} paddingRight={2}>
+          <text fg={DESCRIPTION} attributes={TextAttributes.DIM}>
+            {`↓ ${hiddenBelow} more`}
+          </text>
+        </box>
       )}
     </box>
   );
