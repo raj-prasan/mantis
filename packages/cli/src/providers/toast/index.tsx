@@ -29,10 +29,10 @@ export type ToastProviderProps = {
 const BACKGROUND = "#12121A";
 const MESSAGE = "#E5E7EB";
 
-const VARIANT_STYLES: Record<ToastVariant, { color: string; icon: string }> = {
-  success: { color: "green", icon: "\u2714" },
-  error: { color: "red", icon: "\u2716" },
-  info: { color: "cyan", icon: "\u2139" },
+const VARIANT_STYLES: Record<ToastVariant, { color: string}> = {
+  success: { color: "green"},
+  error: { color: "red"},
+  info: { color: "cyan"},
 };
 
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -52,7 +52,7 @@ type ToastItemProps = {
 };
 
 function ToastItem({ toast, onRemove }: ToastItemProps) {
-  const { color, icon } = VARIANT_STYLES[toast.variant];
+  const { color} = VARIANT_STYLES[toast.variant];
 
   useEffect(() => {
     const timer = setTimeout(() => onRemove(toast), toast.duration);
@@ -72,9 +72,6 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       backgroundColor={BACKGROUND}
       gap={1}
     >
-      <text fg={color} attributes={TextAttributes.BOLD}>
-        {icon}
-      </text>
       <text fg={MESSAGE} attributes={TextAttributes.BOLD}>
         {toast.message}
       </text>
