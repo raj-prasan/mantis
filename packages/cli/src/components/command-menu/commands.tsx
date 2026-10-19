@@ -37,7 +37,16 @@ export const COMMANDS: Command[] = [
     name: "models",
     description: "Switch the model used for this session",
     action : (ctx)=> {
-      ctx.toast({message: "Changing moodel",variant: "success",duration: 3000});
+      ctx.openDialog({
+          title: "Select a model",
+          children: (
+            <box flexDirection="column">
+              <text>opus-4-6</text>
+              <text onMouseDown={ctx.closeDialog}>Cancel</text>
+            </box>
+          ),
+        })
+
     }
   },
   {

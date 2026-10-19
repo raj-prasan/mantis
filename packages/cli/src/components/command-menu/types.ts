@@ -1,3 +1,4 @@
+import type { DialogConfig } from "../../providers/dialog";
 import type { ToastContextValue } from "../../providers/toast";
 
 export type Command = {
@@ -10,5 +11,7 @@ export type Command = {
 
 export type CommandContext = {
   exit :() => void;
-  toast: ToastContextValue["toast"]
+  toast: ToastContextValue["toast"];
+  openDialog: (config: DialogConfig) => void;
+  closeDialog: () => void;
 }
