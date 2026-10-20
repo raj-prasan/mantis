@@ -29,6 +29,7 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
   return (
     <box
       width="100%"
+      flexShrink={0}
       flexDirection="column"
       border
       borderStyle="single"

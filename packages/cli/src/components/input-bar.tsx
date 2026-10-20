@@ -10,7 +10,8 @@ import { useDialog } from "../providers/dialog";
 import { useTheme } from "../providers/theme/context";
 type Props = {
   onSubmit: (text: string)=> void;
-  disabled? : boolean
+  disabled? : boolean;
+  clearOnSubmit?: boolean;
 }
 
 export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
@@ -20,7 +21,7 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
   {name: "enter" , shift: true, action: "newline",}
 ]
 
-export function Inputbar ({onSubmit, disabled = false}: Props){
+export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: Props){
   const {openDialog, closeDialog} = useDialog()
   const {theme} = useTheme()
   const renderer = useRenderer();
@@ -58,6 +59,10 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
     const text = textareaRef.current?.editBuffer.getText() ?? value;
     if (!text.trim()) return;
     onSubmit(text);
+    if (clearOnSubmit) {
+      textareaRef.current?.setText("");
+      setValue("");
+    }
   };
 
   //register the base layer responder for ctrl+c dismissal
