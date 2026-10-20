@@ -1,6 +1,7 @@
 import { TextAttributes } from "@opentui/core";
 import { getCommandValue } from "./commands";
 import type { Command } from "./types";
+import { useTheme } from "../../providers/theme/context";
 export type CommandMenuProps = {
   commands: Command[];
   activeIndex: number;
@@ -8,14 +9,11 @@ export type CommandMenuProps = {
   onExecute: (command: Command) => void;
 };
 
-const BACKGROUND = "#12121A";
-const BORDER = "#2A2A38";
-const ACTIVE_BACKGROUND = "#242433";
-const ACCENT = "cyan";
-const DESCRIPTION = "#6B7280";
 const MAX_VISIBLE = 8;
 
 export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: CommandMenuProps) {
+  const { theme } = useTheme();
+
   if(commands.length === 0){
     return
   }
@@ -34,12 +32,12 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
       flexDirection="column"
       border
       borderStyle="single"
-      borderColor={BORDER}
-      backgroundColor={BACKGROUND}
+      borderColor={theme.border}
+      backgroundColor={theme.surface}
     >
       {hiddenAbove > 0 && (
         <box width="100%" paddingLeft={2} paddingRight={2}>
-          <text fg={DESCRIPTION} attributes={TextAttributes.DIM}>
+          <text fg={theme.textMuted} attributes={TextAttributes.DIM}>
             {`↑ ${hiddenAbove} more`}
           </text>
         </box>
@@ -55,21 +53,21 @@ export function CommandMenu({ commands, activeIndex, onSelect, onExecute }: Comm
               gap={1}
               paddingLeft={2}
               paddingRight={2}
-              backgroundColor={active ? ACTIVE_BACKGROUND : BACKGROUND}
+              backgroundColor={active ? theme.surfaceAlt : theme.surface}
               onMouseDown={() => onExecute(command)}
               onMouseMove={()=>onSelect(command)}
             >
-              <text fg={active ? ACCENT : DESCRIPTION} attributes={active ? TextAttributes.BOLD : undefined}>
+              <text fg={active ? theme.accent : theme.textMuted} attributes={active ? TextAttributes.BOLD : undefined}>
                 {(active ? "▸ " : "  ") + getCommandValue(command)}
               </text>
-              <text fg={DESCRIPTION}>{command.description}</text>
+              <text fg={theme.textMuted}>{command.description}</text>
             </box>
           );
         })
       }
       {hiddenBelow > 0 && (
         <box width="100%" paddingLeft={2} paddingRight={2}>
-          <text fg={DESCRIPTION} attributes={TextAttributes.DIM}>
+          <text fg={theme.textMuted} attributes={TextAttributes.DIM}>
             {`↓ ${hiddenBelow} more`}
           </text>
         </box>

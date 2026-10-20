@@ -1,4 +1,5 @@
 import type { Command } from "./types";
+import { ThemePicker } from "../../providers/dialog/theme-picker";
 
 
 export const COMMANDS: Command[] = [
@@ -72,7 +73,10 @@ export const COMMANDS: Command[] = [
     name: "theme",
     description : "Change color theme",
     action : (ctx)=> {
-      ctx.toast({message: "Slect your theme",variant: "success",duration: 3000});
+      ctx.openDialog({
+        title: "Select a theme",
+        children: <ThemePicker />,
+      });
     }
   },
   {

@@ -5,27 +5,39 @@ import { Inputbar } from "./components/input-bar";
 import { ToastProvider } from "./providers/toast";
 import { KeyboardLayerProvider } from "./providers/keyboard-layer";
 import { DialogProvider } from "./providers/dialog";
+import { ThemeProvider, useTheme } from "./providers/theme";
+
+function Layout() {
+  const { theme } = useTheme();
+
+  return (
+    <box
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor={theme.background}
+      width="100%"
+      height="100%"
+      gap={2}
+    >
+      <Header />
+      <box width="100%" maxWidth={78} paddingX={2}>
+        <Inputbar onSubmit={() => {}} />
+      </box>
+    </box>
+  );
+}
+
 function App() {
   return (
-    <KeyboardLayerProvider>
-      <ToastProvider>
-        <DialogProvider>
-          <box
-            alignItems="center"
-            justifyContent="center"
-            backgroundColor="#0D0D12"
-            width="100%"
-            height="100%"
-            gap={2}
-          >
-            <Header />
-            <box width="100%" maxWidth={78} paddingX={2}>
-              <Inputbar onSubmit={() => {}} />
-            </box>
-          </box>
-        </DialogProvider>
-      </ToastProvider>
-    </KeyboardLayerProvider>
+    <ThemeProvider>
+      <KeyboardLayerProvider>
+        <ToastProvider>
+          <DialogProvider>
+            <Layout />
+          </DialogProvider>
+        </ToastProvider>
+      </KeyboardLayerProvider>
+    </ThemeProvider>
   );
 }
 

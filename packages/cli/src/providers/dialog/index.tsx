@@ -4,6 +4,7 @@ import { TextAttributes } from "@opentui/core";
 import { useKeyboard } from "@opentui/react";
 import type { DialogConfig } from "./types";
 import { useKeyboardLayer } from "../keyboard-layer";
+import { useTheme } from "../theme/context";
 
 export type { DialogConfig } from "./types";
 
@@ -17,12 +18,6 @@ export type DialogProviderProps = {
   children: ReactNode;
 };
 
-const SCRIM = "#0D0D12";
-const BACKGROUND = "#12121A";
-const BORDER = "#2A2A38";
-const TITLE = "#E5E7EB";
-const HINT = "#6B7280";
-
 const DialogContext = createContext<DialogContextValue | null>(null);
 
 export function useDialog(): DialogContextValue {
@@ -34,6 +29,7 @@ export function useDialog(): DialogContextValue {
 }
 
 export function DialogProvider({ children }: DialogProviderProps) {
+  const { theme } = useTheme();
   const { isTopLayer, push, pop } = useKeyboardLayer();
   const [dialog, setDialog] = useState<DialogConfig | null>(null);
 
@@ -56,10 +52,9 @@ export function DialogProvider({ children }: DialogProviderProps) {
   useKeyboard((key) => {
     if (!dialog || key.eventType === "release" || !isTopLayer("dialog")) return;
 
-    key.preventDefault();
-
     if (key.name === "escape") {
       key.preventDefault();
+      key.stopPropagation();
       closeDialog();
     }
   });
@@ -89,8 +84,8 @@ export function DialogProvider({ children }: DialogProviderProps) {
             flexDirection="column"
             border
             borderStyle="single"
-            borderColor={BORDER}
-            backgroundColor={BACKGROUND}
+            borderColor={theme.border}
+            backgroundColor={theme.surface}
             width="100%"
             maxWidth={78}
             paddingX={2}
@@ -104,10 +99,10 @@ export function DialogProvider({ children }: DialogProviderProps) {
               justifyContent="space-between"
               gap={2}
             >
-              <text fg={TITLE} attributes={TextAttributes.BOLD}>
+              <text fg={theme.text} attributes={TextAttributes.BOLD}>
                 {dialog.title}
               </text>
-              <text fg={HINT} attributes={TextAttributes.DIM}>
+              <text fg={theme.textMuted} attributes={TextAttributes.DIM}>
                 esc
               </text>
             </box>

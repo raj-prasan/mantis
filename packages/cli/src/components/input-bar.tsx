@@ -7,6 +7,7 @@ import { useToast } from "../providers/toast";
 
 import { useKeyboardLayer } from "../providers/keyboard-layer";
 import { useDialog } from "../providers/dialog";
+import { useTheme } from "../providers/theme/context";
 type Props = {
   onSubmit: (text: string)=> void;
   disabled? : boolean
@@ -21,6 +22,7 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
 
 export function Inputbar ({onSubmit, disabled = false}: Props){
   const {openDialog, closeDialog} = useDialog()
+  const {theme} = useTheme()
   const renderer = useRenderer();
   const {toast} = useToast()
   const textareaRef = useRef<TextareaRenderable | null>(null);
@@ -86,14 +88,14 @@ export function Inputbar ({onSubmit, disabled = false}: Props){
       width="100%"
       border={["left"]}
       borderStyle="single"
-      borderColor="cyan"
+      borderColor={theme.accent}
       >
         <box
         position="relative"
         justifyContent="center"
         paddingX={2}
         paddingY={1}
-        backgroundColor="#1A1A24"
+        backgroundColor={theme.surface}
         width="100%"
         minWidth={78}
         gap={1}

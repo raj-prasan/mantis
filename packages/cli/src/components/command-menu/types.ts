@@ -14,4 +14,5 @@ export type CommandContext = {
   toast: ToastContextValue["toast"];
   openDialog: (config: DialogConfig) => void;
   closeDialog: () => void;
+  
 }

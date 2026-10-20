@@ -13,6 +13,8 @@ import {
   type ToastOptions,
   type ToastVariant,
 } from "./types";
+import { useTheme } from "../theme/context";
+import type { Theme } from "../theme/types";
 
 export { DEFAULT_DURATION } from "./types";
 export type { ToastOptions, ToastVariant } from "./types";
@@ -24,15 +26,6 @@ export type ToastContextValue = {
 export type ToastProviderProps = {
   children: ReactNode;
   duration?: number;
-};
-
-const BACKGROUND = "#12121A";
-const MESSAGE = "#E5E7EB";
-
-const VARIANT_STYLES: Record<ToastVariant, { color: string}> = {
-  success: { color: "green"},
-  error: { color: "red"},
-  info: { color: "cyan"},
 };
 
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -51,8 +44,15 @@ type ToastItemProps = {
   onRemove: (toast: ToastEntry) => void;
 };
 
+const VARIANT_COLORS: Record<ToastVariant, (theme: Theme) => string> = {
+  success: (theme) => theme.success,
+  error: (theme) => theme.error,
+  info: (theme) => theme.info,
+};
+
 function ToastItem({ toast, onRemove }: ToastItemProps) {
-  const { color} = VARIANT_STYLES[toast.variant];
+  const { theme } = useTheme();
+  const color = VARIANT_COLORS[toast.variant](theme);
 
   useEffect(() => {
     const timer = setTimeout(() => onRemove(toast), toast.duration);
@@ -69,10 +69,10 @@ function ToastItem({ toast, onRemove }: ToastItemProps) {
       border={["left"]}
       borderStyle="single"
       borderColor={color}
-      backgroundColor={BACKGROUND}
+      backgroundColor={theme.surface}
       gap={1}
     >
-      <text fg={MESSAGE} attributes={TextAttributes.BOLD}>
+      <text fg={theme.text} attributes={TextAttributes.BOLD}>
         {toast.message}
       </text>
     </box>
