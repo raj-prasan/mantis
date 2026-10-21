@@ -19,7 +19,7 @@ export function BotMessage({ content }: Props) {
         backgroundColor={theme.surface}
       >
         <text fg={theme.success} attributes={TextAttributes.BOLD}>
-          mantis
+          opus-4-6
         </text>
         <text fg={theme.text}>{content}</text>
       </box>

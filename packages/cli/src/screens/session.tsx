@@ -40,6 +40,8 @@ export function Session() {
       messages={messages}
       onSubmit={handleSubmit}
       emptyText="This session has no messages yet."
+      inputDisabled
+      loading
     />
   );
 }
