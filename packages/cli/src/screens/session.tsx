@@ -8,13 +8,10 @@ export function Session() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const session = id ? getSession(id) : undefined;
-  const [messages, setMessages] = useState<ChatMessage[]>(
-    () => session?.messages ?? [],
-  );
+  const session = id 
 
   useEffect(() => {
-    setMessages(session?.messages ?? []);
+    //setMessages(session?.messages ?? []);
   }, [id, session]);
 
   useEffect(() => {
@@ -27,18 +24,11 @@ export function Session() {
     return null;
   }
 
-  const handleSubmit = (text: string) => {
-    const message = appendMessage(session.id, "user", text);
-    if (message) {
-      setMessages([...session.messages]);
-    }
-  };
-
   return (
     <SessionView
-      title={session.title}
-      messages={messages}
-      onSubmit={handleSubmit}
+      title = "new session"
+      messages={[]}
+      onSubmit={()=>{}}
       emptyText="This session has no messages yet."
       inputDisabled
       loading

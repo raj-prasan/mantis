@@ -20,7 +20,7 @@ export function SessionView({
   onSubmit,
   emptyText = "No messages yet.",
   inputDisabled = false,
-  loading = true,
+  loading,
 }: Props) {
   const { theme } = useTheme();
   const count = messages.length;

@@ -8,16 +8,20 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@mantis/server": "workspace:*",
     "@types/bun": "1.3.14",
     "@types/react": "^19.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@mantis/shared": "workspace:*",
     "@opentui/core": "^0.6.6",
     "@opentui/react": "^0.6.6",
+    "hono": "^4.13.13",
     "opentui-spinner": "^0.0.7",
     "react": "^19.2.8",
-    "react-router": "^8.5.0"
+    "react-router": "^8.5.0",
+    "zod": "^4.6.7"
   },
   "engines": {
     "bun": ">=1.3.0"
