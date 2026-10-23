@@ -64,7 +64,7 @@ const app = new Hono()
 
     return c.json({ result }, 200);
   })
-  .get(":/id", async (c) => {
+  .get("/:id", async (c) => {
     /* // Mock session simmulation
     await new Promise((r)=> setTimeout(r, 3000))
 

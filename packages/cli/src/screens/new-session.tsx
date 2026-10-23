@@ -58,7 +58,7 @@ export function NewSession() {
         }
 
         const session = await res.json();
-        navigate(`sessions/${session.id}`, {
+        navigate(`/sessions/${session.id}`, {
           replace: true,
           state: { session },
         });

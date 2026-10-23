@@ -26,12 +26,12 @@ export function Session() {
 
   return (
     <SessionView
-      title = "new session"
+      title = {String(id)}
       messages={[]}
       onSubmit={()=>{}}
       emptyText="This session has no messages yet."
       inputDisabled
-      loading
+      loading = {false}
     />
   );
 }

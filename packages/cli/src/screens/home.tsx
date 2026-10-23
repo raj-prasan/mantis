@@ -7,7 +7,7 @@ import { useCallback } from "react";
 export function HomeScreen(){
   const navigate = useNavigate();
   const handleSubmit = useCallback((text: string)=>{
-    navigate("sessions/new", {state: {message: text}})
+    navigate("/sessions/new", {state: {message: text}})
   },[navigate])
 
   const {theme} = useTheme()
