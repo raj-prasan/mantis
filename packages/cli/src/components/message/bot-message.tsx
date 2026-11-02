@@ -2,10 +2,11 @@ import { TextAttributes } from "@opentui/core";
 import { useTheme } from "../../providers/theme/context";
 
 type Props = {
-  content: string;
+  content: string,
+  model: string,
 };
 
-export function BotMessage({ content }: Props) {
+export function BotMessage({ content, model }: Props) {
   const { theme } = useTheme();
 
   return (
@@ -19,7 +20,7 @@ export function BotMessage({ content }: Props) {
         backgroundColor={theme.surface}
       >
         <text fg={theme.success} attributes={TextAttributes.BOLD}>
-          opus-4-6
+          {model}
         </text>
         <text fg={theme.text}>{content}</text>
       </box>

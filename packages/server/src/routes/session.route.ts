@@ -65,10 +65,10 @@ const app = new Hono()
     return c.json({ result }, 200);
   })
   .get("/:id", async (c) => {
-    /* // Mock session simmulation
-    await new Promise((r)=> setTimeout(r, 3000))
+     //Mock session simmulation
+    //await new Promise((r)=> setTimeout(r, 3000))
 
-    throw new HTTPException(500, {message: "Mock Error : Session Loading Failed"}) */
+    //throw new HTTPException(500, {message: "Mock Error : Session Loading Failed"}) */
 
     const id = c.req.param("id");
     const session = sessions.find((s) => s.id === id);
@@ -80,10 +80,10 @@ const app = new Hono()
     return c.json(session);
   })
   .post("/", createSessionValidator, async (c) => {
-    /* // Mock session simmulation
+     // Mock session simmulation
     await new Promise((r)=> setTimeout(r, 3000))
 
-    throw new HTTPException(500, {message: "Mock Error : Session Loading Failed"}) */
+    //throw new HTTPException(500, {message: "Mock Error : Session Loading Failed"}) 
 
     const { initialMessage, ...data } = c.req.valid("json");
 

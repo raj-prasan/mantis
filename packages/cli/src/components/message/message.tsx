@@ -1,10 +1,10 @@
-import type { ChatMessage } from "./types";
+import type { SessionData } from "./types";
 import { UserMessage } from "./user-message";
 import { BotMessage } from "./bot-message";
 import { ErrorMessage } from "./error-message";
 
 type Props = {
-  message: ChatMessage;
+  message: SessionData["messages"][number];
 };
 
 export function Message({ message }: Props) {
@@ -14,6 +14,6 @@ export function Message({ message }: Props) {
     case "error":
       return <ErrorMessage message={message.content} />;
     default:
-      return <BotMessage content={message.content} />;
+      return <BotMessage content={message.content} model={message.model} />;
   }
 }

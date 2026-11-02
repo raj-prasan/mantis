@@ -38,9 +38,6 @@ export function SessionView({
         <text fg={theme.accent} attributes={TextAttributes.BOLD}>
           {title}
         </text>
-        <text fg={theme.textMuted}>
-          {`\u00b7 ${count} message${count === 1 ? "" : "s"}`}
-        </text>
       </box>
       <scrollbox
         width="100%"

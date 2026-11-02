@@ -43,7 +43,7 @@ export function NewSession() {
             title: state.message.slice(0, 50),
             cwd: process.cwd(),
             initialMessage: {
-              role: "user",
+              role: "USER",
               content: state.message,
               mode: "BUILD",
               model: DEFAULT_CHAT_MODEL_ID,
@@ -82,13 +82,14 @@ export function NewSession() {
   if (!state) return null;
 
   const messages: ChatMessage[] = [];
-  messages.push({
-    content: state.message,
-    id: "new",
-    role: "user",
-  });
+
 
   return (
-    <SessionView title="new session" messages={messages} onSubmit={() => {}} />
+    <SessionView
+      title="new session"
+      messages={messages}
+      onSubmit={() => { }}
+      inputDisabled={true}
+      loading={true} />
   );
 }
