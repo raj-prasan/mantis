@@ -1,0 +1,43 @@
+// use prisma-8
+
+enum Role {
+  user
+  assistant
+  error
+}
+
+enum Mode {
+  build
+  plan
+}
+
+enum MessageStatus {
+  complete
+  interrupted
+}
+
+model Session {
+  id String @id @onCreate(uuid())
+  userId String
+  title String
+  cwd String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @onUpdate(now())
+  messages Message[]
+  @@index([userId])
+}
+
+model Message {
+  id String @id @onCreate(uuid())
+  role Role
+  content String
+  mode Mode
+  model String
+  status MessageStatus
+  parts Json?
+  duration Int?
+  createdAt DateTime @default(now())
+  sessionId String
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  @@index([sessionId])
+}
