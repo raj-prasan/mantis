@@ -22,7 +22,7 @@ model Session {
   title String
   cwd String
   createdAt DateTime @default(now())
-  updatedAt DateTime @onUpdate(now())
+  updatedAt DateTime @default(now()) @onUpdate(now())
   messages Message[]
   @@index([userId])
 }

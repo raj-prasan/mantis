@@ -8,7 +8,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./enums": "./src/enums.ts"
+    "./enums": "./src/prisma/enums.ts"
   },
   "dependencies": {
     "@prisma/orm-postgres": "8.0.0-rc.21",

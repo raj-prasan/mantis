@@ -464,6 +464,10 @@
                 "updatedAt": {
                   "codecId": "pg/timestamptz-temporal@1",
                   "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
                   "nullable": false
                 },
                 "userId": {
@@ -520,7 +524,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "2ae8f345fd700a02e1f8fd0db7489826c862b1d6bfb66f4797049b3e6dae8ad0"
+    "storageHash": "255b454f297c704fe51d5e6664345532ba6d2f7c5751777efe87aa91f019de65"
   },
   "execution": {
     "executionHash": "4f0aa9240d1761573527207f4cb34430e7fc5376ce0f44bffbb48c6946c4e938",
