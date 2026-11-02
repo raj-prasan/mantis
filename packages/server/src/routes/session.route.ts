@@ -35,8 +35,6 @@ const createSessionValidator = zValidator(
 
 const app = new Hono()
   .get("/", async (c) => {
-    console.log("Role values:", Role.values);
-    console.log("Mode values:", Mode.values);
     const sessions = await db.orm.public.Session
       .orderBy((s) => s.createdAt.desc())
       .select("id", "createdAt", "title")

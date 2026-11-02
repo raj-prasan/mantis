@@ -1,7 +1,13 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { db } from "@mantis/database";
 
 import sessions from "./routes/session.route"
+
+// The Postgres client connects lazily in the background; await it so that
+// the first request doesn't hit DRIVER.NOT_CONNECTED.
+await db.connect();
+
 const app = new Hono();
 
 app.onError((error,c)=>{
