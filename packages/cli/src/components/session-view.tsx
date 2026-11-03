@@ -14,6 +14,26 @@ type Props = {
   loading?: boolean;
 };
 
+type MessageListProps = {
+  messages: ChatMessage[];
+};
+
+function MessageList({ messages }: MessageListProps) {
+  return (
+    <box width="100%" flexDirection="column">
+      {messages.map((message, index) => (
+        <box
+          key={message.id}
+          width="100%"
+          marginBottom={index === messages.length - 1 ? 0 : 1}
+        >
+          <Message message={message} />
+        </box>
+      ))}
+    </box>
+  );
+}
+
 export function SessionView({
   title,
   messages,
@@ -55,17 +75,7 @@ export function SessionView({
             {emptyText}
           </text>
         ) : (
-          <box width="100%" flexDirection="column" >
-            {messages.map((message, index) => (
-              <box
-                key={message.id}
-                width="100%"
-                marginBottom={index === messages.length - 1 ? 0 : 1}
-              >
-                <Message message={message} />
-              </box>
-            ))}
-          </box>
+          <MessageList messages={messages} />
         )}
       </scrollbox>
       <box

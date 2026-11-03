@@ -73,7 +73,7 @@ const app = new Hono()
       });
     }
 
-    return c.json(session, 201);
+    return c.json({...session, initialMessage}, 201);
   });
 
   export default app;

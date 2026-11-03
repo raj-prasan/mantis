@@ -40,6 +40,7 @@ export function NewSession() {
       try {
         const res = await apiClient.sessions.$post({
           json: {
+            //TODO: make an AI API Call to generate session title
             title: state.message.slice(0, 50),
             cwd: process.cwd(),
             initialMessage: {
@@ -82,8 +83,7 @@ export function NewSession() {
   if (!state) return null;
 
   const messages: ChatMessage[] = [];
-
-
+  
   return (
     <SessionView
       title="new session"

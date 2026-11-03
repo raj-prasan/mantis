@@ -29,8 +29,6 @@ export function Session() {
   const [sessionData, setSessionData] = useState<SessionData | null>(prefetched);
 
   useEffect(() => {
-    if (prefetched) return;
-
     setSessionData(null);
     if (!session) return;
     let ignore = false;
