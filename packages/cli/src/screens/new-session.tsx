@@ -80,10 +80,27 @@ export function NewSession() {
     };
   }, [state, navigate, toast]);
 
+  // Show the user's message right away while the session is being created.
+  const messages = useMemo<ChatMessage[]>(() => {
+    if (!state) return [];
+    return [
+      {
+        id: "pending-message",
+        sessionId: "pending-session",
+        role: "user",
+        content: state.message,
+        mode: "build",
+        model: DEFAULT_CHAT_MODEL_ID,
+        status: "complete",
+        parts: null,
+        duration: null,
+        createdAt: new Date().toISOString(),
+      },
+    ];
+  }, [state]);
+
   if (!state) return null;
 
-  const messages: ChatMessage[] = [];
-  
   return (
     <SessionView
       title="new session"

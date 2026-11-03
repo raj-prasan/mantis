@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { findSupportedChatModel } from "@mantis/shared";
+import * as Sentry from "@sentry/hono/bun";
 import { db } from "@mantis/database";
 import { Role,Mode, MessageStatus} from "@mantis/database/enums";
 
@@ -26,6 +27,11 @@ const createSessionValidator = zValidator(
   createSessionSchema,
   (result, c) => {
     if (!result.success) {
+      Sentry.logger.error("Session creation validation failed", {
+        path: c.req.path,
+        issues: result.error.issues.length,
+        method: c.req.method,
+      });
       return c.json({
         error: "Invalid request body"
       }, 400);
@@ -39,6 +45,10 @@ const app = new Hono()
       .orderBy((s) => s.createdAt.desc())
       .select("id", "createdAt", "title")
       .all();
+
+    Sentry.logger.info("Fetched sessions", {
+      count: sessions.length,
+    });
     
     return c.json({ result: sessions }, 200);
   })
@@ -50,6 +60,11 @@ const app = new Hono()
       .first();
 
     if (!session) {
+      Sentry.logger.error("Session not found", {
+        sessionId: id,
+        userId: "mock-user"
+      });
+      
       return c.json({ error: "Session Not Founnd" }, 404);
     }
 
@@ -72,6 +87,13 @@ const app = new Hono()
         status: MessageStatus.values[0],
       });
     }
+    Sentry.logger.info("Session created", {
+      sessionId: session.id,
+      userId: "mock-user",
+      title: session.title,
+      initialMessage: !!initialMessage,
+      cwd: session.cwd,
+    });
 
     return c.json({...session, initialMessage}, 201);
   });
