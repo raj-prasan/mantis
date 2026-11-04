@@ -3,7 +3,7 @@ export type ModelPricing = {
   outputUsdPerMillionToken : number
 }
 
-export type SupportedProvider = "anthropic" |  "openai" | "google";
+export type SupportedProvider = "anthropic" |  "openai" | "google" | "ai-sdk";
 
 type SupportedChatModelDefinion = {
   id: string;
@@ -99,9 +99,17 @@ export const  SUPPORTED_CHAT_MODELS = [
     pricing: {
       inputUsdPerMillionToken: 0.30,
       outputUsdPerMillionToken: 2.50
-    }
+    },
   },
-]as const  satisfies readonly SupportedChatModelDefinion[];
+  {
+    id: "stealth/glyph-clusterstealth/glyph-cluster",
+    provider: "ai-sdk",
+    pricing: {
+      inputUsdPerMillionToken: 0,
+      outputUsdPerMillionToken: 0
+    }
+  }
+] as const satisfies readonly SupportedChatModelDefinion[];
 
 
 export type SupportedChatModel = (typeof SUPPORTED_CHAT_MODELS)[number];  

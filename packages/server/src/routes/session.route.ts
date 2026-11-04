@@ -4,7 +4,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { findSupportedChatModel } from "@mantis/shared";
 import * as Sentry from "@sentry/hono/bun";
-import { db } from "@mantis/database";
+import { db } from "@mantis/database/client";
 import { Role,Mode, MessageStatus} from "@mantis/database/enums";
 
 const createSessionSchema = z.object({

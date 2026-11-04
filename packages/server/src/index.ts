@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { db } from "@mantis/database";
+import { db } from "@mantis/database/client";
 import { sentry } from "@sentry/hono/bun";
 import sessions from "./routes/session.route"
 import * as Sentry from "@sentry/hono/bun";
