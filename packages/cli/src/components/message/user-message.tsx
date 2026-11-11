@@ -16,11 +16,8 @@ export function UserMessage({ content }: Props) {
         gap={0}
         paddingX={2}
         paddingY={1}
-        backgroundColor={theme.surface}
+        backgroundColor={theme.surfaceAlt}
       >
-        <text fg={theme.accent} attributes={TextAttributes.BOLD}>
-          you
-        </text>
         <text fg={theme.text}>{content}</text>
       </box>
     </box>

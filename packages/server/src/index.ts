@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { db } from "@mantis/database/client";
 import { sentry } from "@sentry/hono/bun";
 import sessions from "./routes/session.route"
+import chat from "./routes/chat.route";
 import * as Sentry from "@sentry/hono/bun";
 // The Postgres client connects lazily in the background
 await db.connect();
@@ -49,7 +50,7 @@ app.onError((error,c)=>{
 })
 
 
-const routes = app.route("/sessions", sessions);
+const routes = app.route("/sessions", sessions).route("/chat", chat);
 
 export type AppType = typeof routes;
 

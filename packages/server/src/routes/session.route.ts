@@ -5,16 +5,16 @@ import { z } from "zod";
 import { findSupportedChatModel } from "@mantis/shared";
 import * as Sentry from "@sentry/hono/bun";
 import { db } from "@mantis/database/client";
-import { Role,Mode, MessageStatus} from "@mantis/database/enums";
+import type { Role,Mode, MessageStatus} from "@mantis/database/enums";
 
 const createSessionSchema = z.object({
   title: z.string(),
   cwd: z.string().optional(),
   initialMessage: z
     .object({
-      role: z.enum(Role.values),
+      role: z.enum(["user", "assistant", "error"]),
       content: z.string(),
-      mode: z.enum(Mode.values),
+      mode: z.enum(["build", "plan"]),
       model: z
         .string()
         .refine((id) => !!findSupportedChatModel(id), "Unsupported chat model"),
@@ -84,7 +84,7 @@ const app = new Hono()
       await db.orm.public.Message.create({
         ...initialMessage,
         sessionId: session.id,
-        status: MessageStatus.values[0],
+        status: "complete",
       });
     }
     Sentry.logger.info("Session created", {

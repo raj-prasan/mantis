@@ -1,13 +1,15 @@
 import { TextAttributes } from "@opentui/core";
 import { useTheme } from "../providers/theme/context";
 import { Inputbar } from "./input-bar";
-import { Message } from "./message";
+import { Message, BotMessage } from "./message";
 import type { ChatMessage } from "./message";
 import { Spinner } from "./message/spinner";
+import type { StreamingState } from "../hooks/use-chat";
 
 type Props = {
   title: string;
   messages: ChatMessage[];
+  streaming?: StreamingState;
   onSubmit: (text: string) => void;
   emptyText?: string;
   inputDisabled?: boolean;
@@ -16,20 +18,38 @@ type Props = {
 
 type MessageListProps = {
   messages: ChatMessage[];
+  streaming?: StreamingState;
 };
 
-function MessageList({ messages }: MessageListProps) {
+function MessageList({ messages, streaming }: MessageListProps) {
+  // Only show the in-progress reply once some text has arrived; until then
+  // the spinner under the input bar is the only indicator.
+  const inProgress =
+    streaming?.status === "streaming" && streaming.parts.length > 0
+      ? streaming
+      : null;
+
   return (
     <box width="100%" flexDirection="column">
       {messages.map((message, index) => (
         <box
           key={message.id}
           width="100%"
-          marginBottom={index === messages.length - 1 ? 0 : 1}
+          marginBottom={index === messages.length - 1 && !inProgress ? 0 : 1}
         >
           <Message message={message} />
         </box>
       ))}
+      {inProgress && (
+        <box width="100%">
+          <BotMessage
+            parts={inProgress.parts}
+            mode={inProgress.mode}
+            model={inProgress.model}
+            streaming
+          />
+        </box>
+      )}
     </box>
   );
 }
@@ -37,13 +57,15 @@ function MessageList({ messages }: MessageListProps) {
 export function SessionView({
   title,
   messages,
+  streaming,
   onSubmit,
   emptyText = "No messages yet.",
   inputDisabled = false,
   loading,
 }: Props) {
   const { theme } = useTheme();
-  const count = messages.length;
+  const isStreaming = streaming?.status === "streaming";
+  const hasContent = messages.length > 0 || isStreaming;
 
   return (
     <box width="100%" height="100%" flexDirection="column">
@@ -70,12 +92,12 @@ export function SessionView({
         paddingX={2}
         paddingY={1}
       >
-        {count === 0 ? (
+        {!hasContent ? (
           <text fg={theme.textMuted} attributes={TextAttributes.DIM}>
             {emptyText}
           </text>
         ) : (
-          <MessageList messages={messages} />
+          <MessageList messages={messages} streaming={streaming} />
         )}
       </scrollbox>
       <box

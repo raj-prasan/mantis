@@ -86,15 +86,10 @@ export function NewSession() {
     return [
       {
         id: "pending-message",
-        sessionId: "pending-session",
         role: "user",
         content: state.message,
         mode: "build",
         model: DEFAULT_CHAT_MODEL_ID,
-        status: "complete",
-        parts: null,
-        duration: null,
-        createdAt: new Date().toISOString(),
       },
     ];
   }, [state]);

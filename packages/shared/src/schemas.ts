@@ -1,4 +1,4 @@
-import {string, z} from "zod"
+import { z } from "zod"
 
 export const toolCallArgsSchema = z.record(z.string(), z.json());
 
@@ -28,7 +28,7 @@ export type messagePart = z.infer<typeof messagePartSchema>
 export const chatStreamEventSchema = z.discriminatedUnion("type", [
   z.object({
     type : z.literal("text-delta"),
-    text: string()
+    text: z.string()
   }),
   z.object({
     type: z.literal("reasoning-delta"),
@@ -52,7 +52,7 @@ export const chatStreamEventSchema = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal("error"),
-    message: z.string
+    message: z.string()
   })
 ])
 

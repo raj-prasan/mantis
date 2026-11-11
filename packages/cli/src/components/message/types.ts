@@ -14,4 +14,6 @@ export type SessionData = Omit<SessionResponse, "messages"> & {
   messages: SessionMessage[]
 }
 
-export type ChatMessage = SessionMessage
+// What the UI renders (and what `useChat` manages). Database rows
+// (`SessionData["messages"]`) must be converted into this shape first.
+export type { Message as ChatMessage } from "../../hooks/use-chat";
