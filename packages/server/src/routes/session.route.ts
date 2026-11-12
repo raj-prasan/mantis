@@ -6,7 +6,8 @@ import { findSupportedChatModel } from "@mantis/shared";
 import * as Sentry from "@sentry/hono/bun";
 import { db } from "@mantis/database/client";
 import type { Role,Mode, MessageStatus} from "@mantis/database/enums";
-
+import { generateText } from "ai";
+import { resolveChatModel } from "../lib/models";
 const createSessionSchema = z.object({
   title: z.string(),
   cwd: z.string().optional(),
@@ -38,6 +39,14 @@ const createSessionValidator = zValidator(
     }
   },
 );
+const generateSessionTitle = async (initialMessage: string): string => {
+  const modelInfo = resolveChatModel("gemini-3.5-flash-lite");
+  const { text } = await generateText({
+    model: modelInfo.model,
+    prompt: `Generate a Code AI Assistant Session for the user prompt : ${initialMessage} , keep it shorter , and just give the title and nothing extra , just the session title.`
+  })
+  return text;
+}
 
 const app = new Hono()
   .get("/", async (c) => {
@@ -74,8 +83,13 @@ const app = new Hono()
 
     const { initialMessage, ...data } = c.req.valid("json");
 
+    //TODO : implement try catch in the logic
+    if (!initialMessage) {
+      throw new Error("Initial Message cant be empty")
+    }
     const session = await db.orm.public.Session.create({
       ...data,
+      title : generateSessionTitle(initialMessage.content),
       userId: 'mock-user',
       cwd: data.cwd ?? ""
     });
