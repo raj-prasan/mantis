@@ -3,7 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "postinstall": "bun run --cwd ../database contract:emit"
   },
   "exports": {
     ".": "./src/index.ts"
