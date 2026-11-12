@@ -4,7 +4,7 @@ import { StatusBar } from "./status-bar";
 import { CommandMenu, getCommandValue, useCommandMenu, type Command, type CommandContext } from "./command-menu";
 import { useRenderer } from "@opentui/react";
 import { useToast } from "../providers/toast";
-
+import { useNavigate } from "react-router";
 import { useKeyboardLayer } from "../providers/keyboard-layer";
 import { useDialog } from "../providers/dialog";
 import { useTheme } from "../providers/theme/context";
@@ -23,9 +23,10 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
 
 export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: Props){
   const {openDialog, closeDialog} = useDialog()
-  const {theme} = useTheme()
+  const { theme } = useTheme();
+  const navigate = useNavigate();
   const renderer = useRenderer();
-  const {toast} = useToast()
+  const { toast } = useToast();
   const textareaRef = useRef<TextareaRenderable | null>(null);
   const [value, setValue] = useState("");
   const {isTopLayer, setResponder} = useKeyboardLayer();
@@ -36,7 +37,8 @@ export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: P
         exit: () => renderer.destroy(),
         toast,
         openDialog,
-        closeDialog
+        closeDialog,
+        navigate
       });
       return
     }

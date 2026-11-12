@@ -1,5 +1,6 @@
 import type { Command } from "./types";
 import { ThemePicker } from "../../providers/dialog/theme-picker";
+import { SessionDialogContent } from "../../providers/dialog/sessions-dialog";
 
 
 export const COMMANDS: Command[] = [
@@ -15,7 +16,7 @@ export const COMMANDS: Command[] = [
     name: "new",
     description: "Create a new chat",
     action : (ctx)=> {
-      ctx.toast({message: "Switched to a new chat",variant: "success",duration: 3000});
+      ctx.navigate("/")
     }
   },
   {
@@ -83,7 +84,10 @@ export const COMMANDS: Command[] = [
     name: "sessions",
     description : "Browse past sessions",
     action : (ctx)=> {
-      ctx.toast({message: "Select Past Sessions",variant: "success",duration: 3000});
+      ctx.openDialog({
+        title: "Select a session",
+        children: <SessionDialogContent />,
+      });
     }
   },
   {
