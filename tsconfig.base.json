@@ -6,7 +6,6 @@
     "module": "Preserve",
     "moduleDetection": "force",
     "allowJs": true,
-    "types": ["bun"], //Check if REQUIRED
 
     // Bundler mode
     "moduleResolution": "bundler",
