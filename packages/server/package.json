@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "bun run --hot src/index.ts",
-     "build": "bun run --cwd ../database contract:emit && bun build src/index.ts --outdir dist --target bun",
+    "build": "bun run --cwd ../database contract:emit && bun build src/index.ts --outdir dist --target bun",
     "postinstall": "bun run --cwd ../database contract:emit"
   },
   "exports": {
@@ -25,6 +25,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.3"
+    "@types/bun": "^1.4.3",
+    "typescript": "^7.0.2"
   }
 }
