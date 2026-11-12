@@ -8,6 +8,7 @@ import { db } from "@mantis/database/client";
 import type { Role,Mode, MessageStatus} from "@mantis/database/enums";
 import { generateText } from "ai";
 import { resolveChatModel } from "../lib/models";
+import { GENERATE_TITLE_PROMPT } from "../constants";
 const createSessionSchema = z.object({
   title: z.string(),
   cwd: z.string().optional(),
@@ -39,14 +40,24 @@ const createSessionValidator = zValidator(
     }
   },
 );
-const generateSessionTitle = async (initialMessage: string): string => {
+const generateSessionTitle = async (
+  initialMessage: string
+): Promise<string> => {
   const modelInfo = resolveChatModel("gemini-3.5-flash-lite");
+
   const { text } = await generateText({
     model: modelInfo.model,
-    prompt: `Generate a Code AI Assistant Session for the user prompt : ${initialMessage} , keep it shorter , and just give the title and nothing extra , just the session title.`
-  })
-  return text;
-}
+    prompt: `
+      ${GENERATE_TITLE_PROMPT}
+        ### User's Initial Message:
+        <user_message>
+        ${initialMessage}
+        </user_message>
+        Generate the session title now.`.trim()
+  });
+
+  return text.trim().replace(/^["']|["']$/g, "");
+};
 
 const app = new Hono()
   .get("/", async (c) => {
@@ -89,7 +100,7 @@ const app = new Hono()
     }
     const session = await db.orm.public.Session.create({
       ...data,
-      title : generateSessionTitle(initialMessage.content),
+      title : await generateSessionTitle(initialMessage.content),
       userId: 'mock-user',
       cwd: data.cwd ?? ""
     });
