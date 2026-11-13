@@ -4,6 +4,7 @@ import { Inputbar } from "./input-bar";
 import { Message, BotMessage } from "./message";
 import type { ChatMessage } from "./message";
 import { Spinner } from "./message/spinner";
+import { usePromptConfig } from "../providers/prompt-config";
 import type { StreamingState } from "../hooks/use-chat";
 
 type Props = {
@@ -64,6 +65,7 @@ export function SessionView({
   loading,
 }: Props) {
   const { theme } = useTheme();
+  const { mode } = usePromptConfig();
   const isStreaming = streaming?.status === "streaming";
   const hasContent = messages.length > 0 || isStreaming;
 
@@ -110,7 +112,7 @@ export function SessionView({
         <Inputbar onSubmit={onSubmit} clearOnSubmit disabled={inputDisabled} />
         {loading && (
           <box width="100%" flexDirection="row" paddingTop={1}>
-            <Spinner />
+            <Spinner mode={mode} />
           </box>
         )}
       </box>
