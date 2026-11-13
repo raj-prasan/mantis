@@ -11,6 +11,7 @@ import {
 } from "@mantis/shared"
 
 import type { LanguageModel } from "ai";
+import type {ProviderOptions} from "@ai-sdk/provider-utils"
 
 type anthropicModelId = Extract<SupportedChatModel, { provider: "anthropic" }>["id"];
 type openAiModelId = Extract<SupportedChatModel, { provider: "openai" }>["id"];
@@ -21,6 +22,56 @@ export type ResolvedModel = {
   model: LanguageModel;
   provider: SupportedProvider;
   modelId: SupportedChatModelId;
+  providerOptions?: ProviderOptions
+}
+
+function anthropicThinking(budgetTokens: number): ProviderOptions {
+  return {
+    anthropic: {
+      thinking: {
+        type: "enabled",
+        budgetTokens
+      }
+    }
+  };
+}
+
+function openAIReasoning(reasoningEffort: "low" | "medium" | "high"): ProviderOptions {
+  return {
+    openai: {
+      reasoningEffort,
+      reasoningSummary: "auto"
+    }
+  };
+}
+
+function googleThinking(thinkingBudget: number): ProviderOptions {
+  return {
+    google: {
+      thinkingConfig: {
+        thinkingBudget,
+        includeThoughts: true
+      }
+    }
+  };
+}
+
+const ANTHROPIC_PROVIDER_OPTIONS: Partial<Record<anthropicModelId, ProviderOptions>> = {
+  "claude-sonnet-4-6": anthropicThinking(10000),
+  "claude-opus-5-5": anthropicThinking(16000),
+  "claude-sonnet-5-5": anthropicThinking(10000),
+  "claude-fable-5-1": anthropicThinking(16000)
+}
+
+const OPENAI_PROVIDER_OPTIONS: Partial<Record<openAiModelId, ProviderOptions>> = {
+  "gpt-5.6-sol": openAIReasoning("medium"),
+  "gpt-5.4": openAIReasoning("medium"),
+  "gpt-5.4-mini": openAIReasoning("low")
+}
+
+const GOOGLE_PROVIDER_OPTIONS: Partial<Record<googleModelId, ProviderOptions>> = {
+  "gemini-3.6-flash": googleThinking(8192),
+  "gemini-3.5-flash-lite": googleThinking(2048)
 }
 
 function assertUnsupportedProvider(provider: never): never {
@@ -32,6 +83,7 @@ function resolveAnthropicModel(modelId: anthropicModelId): ResolvedModel {
     model: anthropic(modelId),
     provider: "anthropic",
     modelId,
+    providerOptions: ANTHROPIC_PROVIDER_OPTIONS[modelId],
   }
 }
 function resolveOpenAIModel(modelId: openAiModelId): ResolvedModel {
@@ -39,6 +91,7 @@ function resolveOpenAIModel(modelId: openAiModelId): ResolvedModel {
     model: openai(modelId),
     provider: "openai",
     modelId,
+    providerOptions: OPENAI_PROVIDER_OPTIONS[modelId],
   }
 }
 function resolveGoogleModel(modelId: googleModelId): ResolvedModel {
@@ -46,6 +99,7 @@ function resolveGoogleModel(modelId: googleModelId): ResolvedModel {
     model: google(modelId),
     provider: "google",
     modelId,
+    providerOptions: GOOGLE_PROVIDER_OPTIONS[modelId],
   }
 }
 function resolveAISDKModel(modelId: AISDKModelId): ResolvedModel {
