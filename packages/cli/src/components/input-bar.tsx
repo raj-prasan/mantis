@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import type { KeyBinding, TextareaRenderable } from "@opentui/core";
 import { StatusBar } from "./status-bar";
 import { CommandMenu, getCommandValue, useCommandMenu, type Command, type CommandContext } from "./command-menu";
-import { useRenderer } from "@opentui/react";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { useToast } from "../providers/toast";
 import { useNavigate } from "react-router";
 import { useKeyboardLayer } from "../providers/keyboard-layer";
 import { useDialog } from "../providers/dialog";
 import { useTheme } from "../providers/theme/context";
+import { usePromptConfig } from "../providers/prompt-config";
 type Props = {
   onSubmit: (text: string)=> void;
   disabled? : boolean;
@@ -21,7 +22,8 @@ export const TEXT_AREA_KEY_BINDINGS : KeyBinding[] = [
   {name: "enter" , shift: true, action: "newline",}
 ]
 
-export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: Props){
+export function Inputbar({ onSubmit, disabled = false, clearOnSubmit = false }: Props) {
+  const { mode, toggleMode, setMode, setModel } = usePromptConfig();
   const {openDialog, closeDialog} = useDialog()
   const { theme } = useTheme();
   const navigate = useNavigate();
@@ -38,7 +40,10 @@ export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: P
         toast,
         openDialog,
         closeDialog,
-        navigate
+        navigate,
+        mode, 
+        setMode, 
+        setModel
       });
       return
     }
@@ -66,6 +71,15 @@ export function Inputbar ({onSubmit, disabled = false, clearOnSubmit = false}: P
       setValue("");
     }
   };
+
+  useKeyboard((key) => {
+    if (disabled) return;
+    if (!isTopLayer("base")) return;
+    if (key.name === "tab") {
+      key.preventDefault();
+      toggleMode();
+    }
+  })
 
   //register the base layer responder for ctrl+c dismissal
   useEffect(()=>{

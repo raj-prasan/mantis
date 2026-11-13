@@ -1,6 +1,7 @@
 import type { Command } from "./types";
 import { ThemePicker } from "../../providers/dialog/theme-picker";
 import { SessionDialogContent } from "../../providers/dialog/sessions-dialog";
+import { ModelDialogContent } from "../../providers/dialog/model-dialog";
 
 
 export const COMMANDS: Command[] = [
@@ -41,12 +42,7 @@ export const COMMANDS: Command[] = [
     action : (ctx)=> {
       ctx.openDialog({
           title: "Select a model",
-          children: (
-            <box flexDirection="column">
-              <text>opus-4-6</text>
-              <text onMouseDown={ctx.closeDialog}>Cancel</text>
-            </box>
-          ),
+          children: <ModelDialogContent />,
         })
 
     }

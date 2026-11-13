@@ -4,19 +4,23 @@ import { DialogProvider } from "../providers/dialog";
 import { KeyboardLayerProvider } from "../providers/keyboard-layer";
 import { ThemeProvider } from "../providers/theme";
 import { ThemedRoot } from "./themed-root";
+import { PromptConfigProvider } from "../providers/prompt-config";
 
 export function RootLayout(){
   return (
     <ThemeProvider>
       <KeyboardLayerProvider>
         <ToastProvider>
-          <DialogProvider>
-            <ThemedRoot>
-              <Outlet/>
-            </ThemedRoot>
-          </DialogProvider>
+          <PromptConfigProvider>
+            <DialogProvider>
+              <ThemedRoot>
+                <Outlet/>
+              </ThemedRoot>
+            </DialogProvider>
+          </PromptConfigProvider>
         </ToastProvider>
       </KeyboardLayerProvider>
     </ThemeProvider>
+
   );
 }

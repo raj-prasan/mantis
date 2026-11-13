@@ -54,14 +54,6 @@ export const  SUPPORTED_CHAT_MODELS = [
     }
   },
   {
-    id: "claude-haiku-5-5",
-    provider: "anthropic",
-    pricing: {
-      inputUsdPerMillionToken: 0.10,
-      outputUsdPerMillionToken: 0.50
-    }
-  },
-  {
     id: "gpt-5.6-sol",
     provider: "openai",
     pricing: {
@@ -102,7 +94,7 @@ export const  SUPPORTED_CHAT_MODELS = [
     },
   },
   {
-    id: "stealth/glyph-clusterstealth/glyph-cluster",
+    id: "stealth/glyph-cluster",
     provider: "ai-sdk",
     pricing: {
       inputUsdPerMillionToken: 0,

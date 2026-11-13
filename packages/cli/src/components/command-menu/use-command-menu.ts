@@ -54,6 +54,8 @@ export function useCommandMenu({
   }, [query]);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     push("command", () => {
       close();
       pop("command");
@@ -63,7 +65,7 @@ export function useCommandMenu({
     return () => {
       pop("command");
     };
-  }, [push, pop, close]);
+  }, [isOpen, push, pop, close]);
 
   const select = (command: Command) => {
     const index = matches.indexOf(command);

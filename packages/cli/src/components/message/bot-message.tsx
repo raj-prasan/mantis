@@ -35,7 +35,7 @@ export function BotMessage({
         <text fg={theme.text}>{text}</text>
         <box flexDirection="row" gap={1}>
           <text fg={mode === "plan" ? theme.success : theme.info}>•</text>
-          <text>{mode === "plan" ? "Plan" : "Build"}</text>
+          <text fg={mode === "plan" ? theme.success : theme.info}>{mode === "plan" ? "Plan" : "Build"}</text>
           <text attributes={TextAttributes.DIM} fg={theme.textMuted}>{">"}</text>
           <text attributes={TextAttributes.DIM}>{model}</text>
           {duration && (
